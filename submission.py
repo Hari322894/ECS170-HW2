@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 torch.manual_seed(42)
 np.random.seed(42)
 
+#need to open up MNIST files
 def load_mnist_images(filename):
     with gzip.open(filename, 'rb') as f:
         data = np.frombuffer(f.read(), np.uint8, offset=16)
@@ -19,12 +20,13 @@ def load_mnist_labels(filename):
         data = np.frombuffer(f.read(), np.uint8, offset=8)
     return data
 
-print("Loading Fashion-MNIST dataset...")
+# Load data
 x_train_full = load_mnist_images('train-images-idx3-ubyte.gz')
 y_train_full = load_mnist_labels('train-labels-idx1-ubyte.gz')
 x_test = load_mnist_images('t10k-images-idx3-ubyte.gz')
 y_test = load_mnist_labels('t10k-labels-idx1-ubyte.gz')
 
+#normalization
 x_train_full = x_train_full.astype('float32') / 255.0
 x_test = x_test.astype('float32') / 255.0
 
@@ -33,11 +35,11 @@ y_train = y_train_full[:-12000]
 x_val = x_train_full[-12000:]
 y_val = y_train_full[-12000:]
 
-x_train = torch.FloatTensor(x_train).unsqueeze(1)
+x_train = torch.FloatTensor(x_train.reshape(-1, 1, 28, 28))
 y_train = torch.LongTensor(y_train)
-x_val = torch.FloatTensor(x_val).unsqueeze(1)
+x_val = torch.FloatTensor(x_val.reshape(-1, 1, 28, 28))
 y_val = torch.LongTensor(y_val)
-x_test = torch.FloatTensor(x_test).unsqueeze(1)
+x_test = torch.FloatTensor(x_test.reshape(-1, 1, 28, 28))
 y_test_tensor = torch.LongTensor(y_test)
 
 train_loader = DataLoader(TensorDataset(x_train, y_train), batch_size=32, shuffle=True)
@@ -99,6 +101,7 @@ def evaluate(model, loader):
 train_acc_history = []
 val_acc_history = []
 
+#run 10 epochs
 print("Training for 10 epochs...")
 for epoch in range(10):
     train_acc = train_epoch(model, train_loader, criterion, optimizer)
@@ -154,8 +157,3 @@ for true_class in range(10):
 plt.tight_layout()
 plt.savefig('misclassified_examples.png')
 plt.show()
-
-print(f"\nOBSERVATIONS:")
-print(f"Test accuracy: {test_acc*100:.2f}%")
-print(f"Parameters: {trainable_params:,}")
-print("Model shows good generalization with minimal overfitting.")
