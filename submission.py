@@ -6,8 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 
-torch.manual_seed(42)
-np.random.seed(42)
+torch.manual_seed()
+np.random.seed()
 
 #need to open up MNIST files
 def load_mnist_images(filename):
