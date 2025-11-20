@@ -27,6 +27,8 @@
 <img width="1859" height="937" alt="image" src="https://github.com/user-attachments/assets/10954909-787a-49f0-ab46-697253f22617" />
 
 ## 5: Other Comments:
+The model achieves 91.9% test accuracy, which I think is accurate. Training and validation curves show good convergence with minimal 
+overfitting (around a 5% gap). Most misclassifications occur between visually similar  classes like shirts/pullovers and sneakers/ankle boots. The model could be  improved with dropout, data augmentation, or deeper architecture.
 
 
 
